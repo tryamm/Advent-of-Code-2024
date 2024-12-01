@@ -18,6 +18,15 @@ namespace Advent_of_Code_2024
             Console.WriteLine();
         }
 
+        public static void PrintArray(int[] input) {
+            for (int i = 0; i < input.Count(); i++)
+            {
+                Console.WriteLine(input[i]);
+            }
+
+            Console.WriteLine();
+        }
+
         public static List<string> Transpose(List<string> matrix) {
             return matrix
                 .SelectMany(inner => inner.Select((item, index) => new { item, index }))
