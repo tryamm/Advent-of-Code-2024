@@ -1,4 +1,4 @@
-﻿namespace Advent_of_Code_2024.Day1
+﻿namespace Advent_of_Code_2024.Day2
 {
     public static class Day2
     {
