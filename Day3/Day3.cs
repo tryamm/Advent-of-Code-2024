@@ -2,7 +2,7 @@
 
 namespace Advent_of_Code_2024.Day3
 {
-    public static partial class Day3
+    public static class Day3
     {
         private static string[] _input;
 

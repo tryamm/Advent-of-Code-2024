@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Advent_of_Code_2024.Day6
+﻿namespace Advent_of_Code_2024.Day6
 {
     public static class Day6
     {
@@ -24,66 +22,100 @@ namespace Advent_of_Code_2024.Day6
         public static int Part2() {
             Init();
             var result = 0;
-            Move();
+            for (int i = 0; i < _input.Length; i++)
+            {
+                for (int j = 0; j < _input[0].Length; j++)
+                {
+                    var originalChar = _input[i][j];
+                    _input[i] = _input[i].SubstituteChar(j, _obstacle);
+                    if (CheckCycle()) result++;
+                    _input[i] = _input[i].SubstituteChar(j, originalChar);
+                }
+            }
             return result;
         }
 
         private static void Move() {
             _path[_guard.y, _guard.x] = true;
-            if (!CanMove()) return;
+            if (!CanMove(_guard)) return;
 
             if (_input[_guard.y][_guard.x] == _obstacle)
             {
                 _guard.TurnRight();
             }
 
-            switch (_guard.direction)
+            Step(_guard);
+            Move();
+        }
+
+        private static bool CheckCycle() {
+            var fast = new Guard(_guard.x, _guard.y);
+            var slow = new Guard(_guard.x, _guard.y);
+            Step(fast);
+
+            while (CanMove(fast) && !fast.Equals(slow))
+            {
+                Step(fast);
+                if (CanMove(fast)) Step(fast);
+                Step(slow);
+            }
+
+            return fast.Equals(slow);
+        }
+
+        private static void Step(Guard guard) {
+            switch (guard.direction)
             {
                 case Direction.Up:
-                    _guard.y--;
-                    if (_input[_guard.y][_guard.x] == _obstacle)
+                    guard.y--;
+                    if (_input[guard.y][guard.x] == _obstacle)
                     {
-                        _guard.TurnRight();
-                        _guard.y++;
+                        guard.TurnRight();
+                        guard.y++;
                     }
                     break;
                 case Direction.Right:
-                    _guard.x++;
-                    if (_input[_guard.y][_guard.x] == _obstacle)
+                    guard.x++;
+                    if (_input[guard.y][guard.x] == _obstacle)
                     {
-                        _guard.TurnRight();
-                        _guard.x--;
+                        guard.TurnRight();
+                        guard.x--;
                     }
                     break;
                 case Direction.Down:
-                    _guard.y++;
-                    if (_input[_guard.y][_guard.x] == _obstacle)
+                    guard.y++;
+                    if (_input[guard.y][guard.x] == _obstacle)
                     {
-                        _guard.TurnRight();
-                        _guard.y--;
+                        guard.TurnRight();
+                        guard.y--;
                     }
                     break;
                 case Direction.Left:
-                    _guard.x--;
-                    if (_input[_guard.y][_guard.x] == _obstacle)
+                    guard.x--;
+                    if (_input[guard.y][guard.x] == _obstacle)
                     {
-                        _guard.TurnRight();
-                        _guard.x++;
+                        guard.TurnRight();
+                        guard.x++;
                     }
                     break;
             }
-            Move();
-
         }
 
-        private static bool CheckLoop() {
-            int x = _guard.x;
-            int y = _guard.y;
-            
+        private static int CalculatePath() {
+            var result = 0;
+            for (int i = 0; i < _input.Length; i++)
+            {
+                for (int j = 0; j < _input[0].Length; j++)
+                {
+                    if (_path[i, j]) ++result;
+                }
+            }
+
+            return result;
         }
 
-        private static bool CanMove() {
-            return _guard.x < _maxX && _guard.y < _maxY && _guard.x > _minX && _guard.y > _minY;
+        private static bool CanMove(Guard guard) {
+            return guard.x < _maxX && guard.y < _maxY && guard.x > _minX && guard.y > _minY;
         }
 
         private static void Init() {
@@ -107,22 +139,9 @@ namespace Advent_of_Code_2024.Day6
                 }
             }
         }
-
-        private static int CalculatePath() {
-            var result = 0;
-            for (int i = 0; i < _input.Length; i++)
-            {
-                for (int j = 0; j < _input[0].Length; j++)
-                {
-                    if (_path[i, j]) ++result;
-                }
-            }
-
-            return result;
-        }
     }
 
-    public struct Guard()
+    public class Guard()
     {
         public int x;
         public int y;
@@ -140,6 +159,10 @@ namespace Advent_of_Code_2024.Day6
                 direction = Direction.Up;
             }
             else direction++;
+        }
+
+        public bool Equals(Guard obj) {
+            return obj.x == this.x && obj.y == this.y && obj.direction == this.direction;
         }
     }
 

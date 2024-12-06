@@ -2,7 +2,7 @@
 
 namespace Advent_of_Code_2024.Day4
 {
-    public static partial class Day4
+    public static class Day4
     {
         private static string[] _input;
         private static int _maxX;

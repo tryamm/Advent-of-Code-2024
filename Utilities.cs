@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 
 namespace Advent_of_Code_2024
 {
@@ -33,6 +34,12 @@ namespace Advent_of_Code_2024
                 .GroupBy(i => i.index, i => i.item)
                 .Select(g => new string(g.ToArray()))
                 .ToList();
+        }
+
+        public static string SubstituteChar(this string input, int index, char c) {
+            var sb = new StringBuilder(input);
+            sb[index] = c;
+            return sb.ToString();
         }
     }
 }

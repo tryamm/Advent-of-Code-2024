@@ -2,7 +2,7 @@
 
 namespace Advent_of_Code_2024.Day5
 {
-    public static partial class Day5
+    public static class Day5
     {
         private static string[] _input;
         private static Dictionary<int, IEnumerable<int>> _rules = [];
