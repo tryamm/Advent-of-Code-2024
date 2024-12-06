@@ -15,6 +15,7 @@
 
         public static int Part1() {
             Init();
+            _path = new bool[_maxY + 1, _maxX + 1];
             Move();
             return CalculatePath();
         }
@@ -26,10 +27,13 @@
             {
                 for (int j = 0; j < _input[0].Length; j++)
                 {
-                    var originalChar = _input[i][j];
-                    _input[i] = _input[i].SubstituteChar(j, _obstacle);
-                    if (CheckCycle()) result++;
-                    _input[i] = _input[i].SubstituteChar(j, originalChar);
+                    if (_path[i, j])
+                    {
+                        var originalChar = _input[i][j];
+                        _input[i] = _input[i].SubstituteChar(j, _obstacle);
+                        if (CheckCycle()) result++;
+                        _input[i] = _input[i].SubstituteChar(j, originalChar);
+                    }
                 }
             }
             return result;
@@ -124,7 +128,6 @@
             _maxY = _input.Length - 1;
             _minX = 0;
             _minY = 0;
-            _path = new bool[_maxY + 1, _maxX + 1];
 
             LocateGuard();
         }
