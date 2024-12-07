@@ -13,7 +13,7 @@
 //Console.WriteLine(Day5.Part1());
 //Console.WriteLine(Day5.Part2());
 
-using Advent_of_Code_2024.Day6;
+using Advent_of_Code_2024.Day7;
 
-Console.WriteLine(Day6.Part1());
-Console.WriteLine(Day6.Part2());
+Console.WriteLine(Day7.Part1());
+Console.WriteLine(Day7.Part2());
