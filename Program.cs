@@ -13,9 +13,6 @@
 //Console.WriteLine(Day5.Part1());
 //Console.WriteLine(Day5.Part2());
 
-using Advent_of_Code_2024.Day10;
-using Advent_of_Code_2024.Day9;
-
 //Console.WriteLine(Day7.Part1());
 //Console.WriteLine(Day7.Part2());
 
@@ -25,10 +22,14 @@ using Advent_of_Code_2024.Day9;
 //Console.WriteLine(Day9.Part1());
 //Console.WriteLine(Day9.Part2());
 
-Console.WriteLine(Day10.Part1());
-Console.WriteLine(Day10.Part2());
-Console.WriteLine(Day13.Part1());
-Console.WriteLine(Day13.Part2());
-Console.WriteLine(Day12.Part1());
-Console.WriteLine(Day12.Part2());
+//Console.WriteLine(Day10.Part1());
+//Console.WriteLine(Day10.Part2());
 
+//Console.WriteLine(Day11.Part1());
+//Console.WriteLine(Day11.Part2());
+
+//Console.WriteLine(Day12.Part1());
+//Console.WriteLine(Day12.Part2());
+
+//Console.WriteLine(Day13.Part1());
+//Console.WriteLine(Day13.Part2());
