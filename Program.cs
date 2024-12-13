@@ -29,3 +29,6 @@ Console.WriteLine(Day10.Part1());
 Console.WriteLine(Day10.Part2());
 Console.WriteLine(Day13.Part1());
 Console.WriteLine(Day13.Part2());
+Console.WriteLine(Day12.Part1());
+Console.WriteLine(Day12.Part2());
+
