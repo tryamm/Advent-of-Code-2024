@@ -27,3 +27,5 @@ using Advent_of_Code_2024.Day9;
 
 Console.WriteLine(Day10.Part1());
 Console.WriteLine(Day10.Part2());
+Console.WriteLine(Day13.Part1());
+Console.WriteLine(Day13.Part2());
