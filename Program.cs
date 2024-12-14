@@ -33,3 +33,6 @@
 
 //Console.WriteLine(Day13.Part1());
 //Console.WriteLine(Day13.Part2());
+
+Console.WriteLine(Day14.Part1());
+Console.WriteLine(Day14.Part2());
