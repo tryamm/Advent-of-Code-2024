@@ -34,5 +34,10 @@
 //Console.WriteLine(Day13.Part1());
 //Console.WriteLine(Day13.Part2());
 
-Console.WriteLine(Day14.Part1());
-Console.WriteLine(Day14.Part2());
+//Console.WriteLine(Day14.Part1());
+//Console.WriteLine(Day14.Part2());
+
+using Advent_of_Code_2024.Day15;
+
+Console.WriteLine(Day15.Part1());
+Console.WriteLine(Day15.Part2());
