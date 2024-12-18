@@ -19,6 +19,19 @@ namespace Advent_of_Code_2024
             Console.WriteLine();
         }
 
+        public static void PrintArray(List<List<long>> input) {
+            for (int i = 0; i < input.Count(); i++)
+            {
+                for (int j = 0; j < input[0].Count(); j++)
+                {
+                    Console.Write(input[i][j] == long.MaxValue ? 0 : input[i][j]);
+                    Console.Write("   ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+
         public static void PrintArray(int[] input) {
             for (int i = 0; i < input.Count(); i++)
             {
