@@ -27,6 +27,18 @@ namespace Advent_of_Code_2024
 
             Console.WriteLine();
         }
+        public static void PrintArray(List<List<bool>> input) {
+            for (int i = 0; i < input.Count(); i++)
+            {
+                for (int j = 0; j < input.Count(); j++)
+                {
+                    Console.Write((input[i][j] ? "." : "#") + " ");
+                }
+                Console.WriteLine();
+            }
+
+        }
+
 
         public static List<string> Transpose(List<string> matrix) {
             return matrix
