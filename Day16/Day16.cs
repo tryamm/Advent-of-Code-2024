@@ -8,49 +8,60 @@
         private static (int y, int x) _deer;
         private static (int y, int x) _target;
         private static Dictionary<(int y, int x), List<(int y, int x)>> _predecessors = [];
-        private static SortedSet<(long score, (int y, int x) point, Direction d)> _priorityQueue = [];
+        private static SortedSet<(long score, (int y, int x) point, (int y, int x) prevPoint, Direction d)> _priorityQueue = [];
 
         private static List<(int y, int x)> _seats;
+        private static int _maxX;
+        private static int _maxY;
+        private static int _minX;
+        private static int _minY;
 
         public static long Part1() {
             Init();
             var result = long.MaxValue;
-            _priorityQueue.Add((0, _deer, Direction.Right));
+            _priorityQueue.Add((0, _deer, _deer, Direction.Right));
             while (_priorityQueue.Count > 0)
             {
                 var item = _priorityQueue.Min;
-                var (score, point, d) = item;
-                //if (score < _map[point.y][point.x])
-                //{
-                //    if (!_predecessors.TryGetValue((point.y, point.x), out var preds))
-                //    {
-                //        preds = [];
-                //        _predecessors.Add((point.y, point.x), preds);
-                //    }
+                var (score, point, prevPoint, d) = item;
+                if (new[] { _minX, _maxX }.Contains(point.x) || new[] { _minY, _maxY }.Contains(point.y))
+                {
+                    _priorityQueue.Remove(item);
+                    continue;
+                }
+                if (score <= _map[point.y][point.x] || Math.Abs(score - _map[point.y][point.x]) == 1000)
+                {
+                    if (!_predecessors.TryGetValue((point.y, point.x), out var preds))
+                    {
+                        preds = [];
+                        _predecessors.Add((point.y, point.x), preds);
+                    }
 
-                //    preds.Add(point);
-                //}
+                    if (preds.Count > 0 && score < _map[point.y][point.x])
+                    {
+                        preds.RemoveAll(x => true);
+                    }
+
+                    preds.Add(prevPoint);
+                    _map[point.y][point.x] = score;
+                }
+
                 if (point.x == _target.x && point.y == _target.y)
                 {
-                    //if (result <= score) 
                     result = Math.Min(result, score);
-                    //_priorityQueue = [];
+                    _priorityQueue = [];
+                    continue;
                 }
                 if (_path[point.y][point.x])
                 {
-                    _priorityQueue.RemoveWhere(q => q.point.Equals(point));
+                    _priorityQueue.Remove(item);
                     continue;
                 }
-                _map[point.y][point.x] = Math.Min(score, _map[point.y][point.x]);
-                //if (_path[point.y][point.x]) continue;
+
                 switch (d)
                 {
                     case Direction.Right:
                         {
-                            //if (!_path[point.y][point.x + 1])
-                            //    if (!_path[point.y + 1][point.x])
-                            //        if (!_path[point.y - 1][point.x])
-                            ProcessPoint(score + 1, point.y, point.x + 1, point, d);
                             ProcessPoint(score + 1, point.y, point.x + 1, point, d);
                             ProcessPoint(score + 1001, point.y + 1, point.x, point, d.TurnRight());
                             ProcessPoint(score + 1001, point.y - 1, point.x, point, d.TurnLeft());
@@ -58,9 +69,6 @@
                         }
                     case Direction.Down:
                         {
-                            //if (!_path[point.y + 1][point.x])
-                            //    if (!_path[point.y][point.x - 1])
-                            //        if (!_path[point.y][point.x + 1])
                             ProcessPoint(score + 1, point.y + 1, point.x, point, d);
                             ProcessPoint(score + 1001, point.y, point.x - 1, point, d.TurnRight());
                             ProcessPoint(score + 1001, point.y, point.x + 1, point, d.TurnLeft());
@@ -68,9 +76,6 @@
                         }
                     case Direction.Left:
                         {
-                            //if (!_path[point.y][point.x - 1])
-                            //    if (!_path[point.y - 1][point.x])
-                            //        if (!_path[point.y + 1][point.x])
                             ProcessPoint(score + 1, point.y, point.x - 1, point, d);
                             ProcessPoint(score + 1001, point.y - 1, point.x, point, d.TurnRight());
                             ProcessPoint(score + 1001, point.y + 1, point.x, point, d.TurnLeft());
@@ -78,9 +83,6 @@
                         }
                     case Direction.Up:
                         {
-                            //    if (!_path[point.y - 1][point.x])
-                            //        if (!_path[point.y][point.x + 1])
-                            //            if (!_path[point.y][point.x - 1])
                             ProcessPoint(score + 1, point.y - 1, point.x, point, d);
                             ProcessPoint(score + 1001, point.y, point.x + 1, point, d.TurnRight());
                             ProcessPoint(score + 1001, point.y, point.x - 1, point, d.TurnLeft());
@@ -89,38 +91,20 @@
                 }
 
                 _path[point.y][point.x] = true;
-                _priorityQueue.RemoveWhere(q => q.point.Equals(point));
+                _priorityQueue.Remove(item);
             }
             return result;
         }
 
         private static void ProcessPoint(long score, int y, int x, (int y, int x) point, Direction d) {
-            if (!_predecessors.TryGetValue((y, x), out var preds))
-            {
-                preds = [];
-                _predecessors.Add((y, x), preds);
-            }
-
-            preds.Add(point);
-            var min = preds.Select(p => _map[p.y][p.x]).OrderBy(p => p).First();
-            if (min > 0)
-            {
-                preds = preds.Where(p => _map[p.y][p.x] == min).ToList();
-            }
-            _priorityQueue.Add((score, (y, x), d));
+            _priorityQueue.Add((score, (y, x), point, d));
         }
 
         public static long Part2() {
-            //Init();
-            Utilities.PrintArray(_map);
             _predecessors = _predecessors.OrderBy(x => x.Key).ToDictionary();
-            _predecessors.Remove(_deer);
             _seats = [];
-            _ = FindAllSeats(_target.y, _target.x);
-            return _seats.Count();
-
-            //517 high
-            // 150
+            var result = FindAllSeats(_target.y, _target.x);
+            return _seats.Count;
         }
 
         static int FindAllSeats(int y, int x) {
@@ -131,7 +115,7 @@
             if (point == null)
                 return 0;
 
-            return point.Select(p => Math.Abs(_map[y][x] - _map[p.y][p.x]) <= 1001 ? FindAllSeats(p.y, p.x) : 0).Count();
+            return point.Select(p => FindAllSeats(p.y, p.x)).Count();
         }
 
         private static Direction TurnRight(this Direction direction) {
@@ -154,6 +138,9 @@
             _input = Utilities.GetInputData(typeof(Day16).Name);
             _map = [];
             _path = [];
+            _maxX = _input[0].Length - 1;
+            _maxY = _input.Length - 1;
+            _minX = _minY = 0;
             for (int i = 0; i < _input.Length; i++)
             {
                 _map.Add([]);
@@ -166,7 +153,7 @@
                     if (_input[i][j] == 'E')
                         _target = (i, j);
 
-                    _path[i].Add(_input[i][j] == '#' ? true : false);
+                    _path[i].Add(_input[i][j] == '#');
                 }
             }
         }
